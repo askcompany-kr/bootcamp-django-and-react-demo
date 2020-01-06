@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.scss';
-import PostList from "./pages/PostList";
+import PostList from "./components/PostList";
 
 function App() {
   return (
