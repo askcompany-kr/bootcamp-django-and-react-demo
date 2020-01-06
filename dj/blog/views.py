@@ -1,5 +1,9 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+
+from .encoders import JSONEncoder
+from .models import Post
 
 
 def index(request):
-    return render(request, 'blog/index.html')
+    qs = Post.objects.all()
+    return JsonResponse(qs, encoder=JSONEncoder, safe=False)
