@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'corsheaders',
 
+    'accounts',
     'blog',
 ]
 
@@ -126,3 +127,9 @@ STATIC_URL = '/static/'
 
 
 CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+
+
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', SECRET_KEY)
+# https://pyjwt.readthedocs.io/en/latest/algorithms.html
+JWT_ALGORITHM = 'HS512'
+JWT_EXPIRATION_DELTA = 24 * 3600  # seconds
