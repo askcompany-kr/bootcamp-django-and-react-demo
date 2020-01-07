@@ -21,14 +21,14 @@ def decode(encoded_str) -> Dict[str, Any]:
     return data
 
 
-def jwt_validate_required(view_fn: Callable):
-    def wrap(request: HttpRequest, *args, **kwargs) -> HttpResponse:
+def JwtMiddleware(get_response):
+    def middleware(request):
         authorization = request.META.get('HTTP_AUTHORIZATION')
         if authorization:
             try:
                 auth_type, credentials = authorization.split(' ', 1)
                 if auth_type != 'Token':
-                    return HttpResponse('Invalid authorization type', status=401)
+                    raise ValueError
 
                 data = decode(credentials)
                 user_id = data['user_id']
@@ -36,11 +36,8 @@ def jwt_validate_required(view_fn: Callable):
                 qs = get_user_model().objects.all()  # FIXME: 제한
                 user = qs.get(pk=user_id)
                 auth_login(request, user)
-
-                return view_fn(request, *args, **kwargs)
             except (ValueError, jwt.InvalidTokenError):
-                pass
+                return HttpResponse('Unauthorized', status=401)
 
-        return HttpResponse('Unauthorized', status=401)
-
-    return wrap
+        return get_response(request)
+    return middleware
