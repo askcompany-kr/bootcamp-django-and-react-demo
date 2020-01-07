@@ -1,6 +1,6 @@
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
+from accounts.decorators import login_required
 from .encoders import JSONEncoder
 from .models import Post
 

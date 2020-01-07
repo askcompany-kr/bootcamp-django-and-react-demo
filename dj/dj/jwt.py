@@ -21,8 +21,8 @@ def decode(encoded_str) -> Dict[str, Any]:
     return data
 
 
-def JwtMiddleware(get_response):
-    def middleware(request):
+def JwtMiddleware(get_response: Callable):
+    def middleware(request: HttpRequest):
         authorization = request.META.get('HTTP_AUTHORIZATION')
         if authorization:
             try:
