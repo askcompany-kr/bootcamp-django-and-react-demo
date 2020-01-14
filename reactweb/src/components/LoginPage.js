@@ -1,24 +1,37 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
+import {parse as parseQueryString} from "querystring";
 import axiosInstance from "../api";
 import useInputs from "../lib/useInputs";
-import {appContext} from "../App";
+import {AppContext} from "../AppContext";
 
 
-export default function LoginPage() {
-  const { setJwtToken } = useContext(appContext);
+export default function LoginPage({ history, location }) {
+  const { actions: { setJwtToken } } = useContext(AppContext);
   const [inputState, onChange] = useInputs({ username: '', password : '' });
   const { username, password } = inputState;
+  const [isLoading, setIsLoading] = useState(false);
+
+  const queryString = parseQueryString(location.search.replace('?', ''));
 
   const login = () => {
+    setIsLoading(true);
+
     const data = { username, password };
-    axiosInstance
-      .post("/accounts/login/", data)
+
+    axiosInstance.post("/accounts/login/", data)
       .then(response => {
-        const { data: jwt_token } = response;
-        console.log(">>> jwt_token :", jwt_token);
-        setJwtToken(jwt_token);
+        const { data: jwtToken } = response;
+        setJwtToken(jwtToken);
+
+        const { next: nextUrl } = queryString;
+        history.push(nextUrl || "/");
       })
-    ;
+      .catch(e => {
+        console.error(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -31,12 +44,12 @@ export default function LoginPage() {
                placeholder="username" />
       </div>
       <div>
-        <input type="text" name="password" onChange={onChange}
+        <input type="password" name="password" onChange={onChange}
                value={password}
                placeholder="password" />
       </div>
 
-      <button onClick={login}>Login</button>
+      <button onClick={login} disabled={isLoading}>Login</button>
     </div>
   );
 }

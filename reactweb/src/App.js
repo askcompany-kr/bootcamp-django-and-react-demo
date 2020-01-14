@@ -1,20 +1,14 @@
-import React, {createContext} from 'react';
+import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import PostList from "./components/PostList";
-
-import './App.scss';
 import LoginPage from "./components/LoginPage";
-import useLocalStorage from "./lib/useLocalStorage";
-
-
-export const appContext = createContext();
+import {AppProvider} from "./AppContext";
+import './App.scss';
 
 
 function App() {
-  const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', null);
-
   return (
-    <appContext.Provider value={{ jwtToken, setJwtToken }}>
+    <AppProvider>
       <BrowserRouter>
         <div className="App">
           <h1>Bootcamp Django Demo</h1>
@@ -25,7 +19,7 @@ function App() {
           </Switch>
         </div>
       </BrowserRouter>
-    </appContext.Provider>
+    </AppProvider>
   );
 }
 

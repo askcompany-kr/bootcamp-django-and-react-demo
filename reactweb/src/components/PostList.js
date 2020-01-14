@@ -2,11 +2,11 @@ import React, {useCallback, useContext, useEffect, useState} from "react";
 import styles from "./PostList.module.scss";
 import PostDetail from "./PostDetail";
 import axiosInstance from "../api";
-import {appContext} from "../App";
+import {AppContext} from "../AppContext";
 
 
-export default function PostList({ history }) {
-  const {jwtToken} = useContext(appContext);
+export default function PostList({ history, location }) {
+  const { state: { jwtToken } } = useContext(AppContext);
 
   const [loading, setLoading] = useState(false);
   const [postList, setPostList] = useState(null);
@@ -19,9 +19,8 @@ export default function PostList({ history }) {
   const loadPostList = useCallback(() => {
     setLoading(true);
 
-    const headers = {
-      'Authorization': `Token ${jwtToken}`,
-    };
+    const Authorization = `Token ${jwtToken}`;
+    const headers = { Authorization };
     axiosInstance.get("/blog/", { headers })
       .then(response => {
         const { data } = response;
@@ -30,7 +29,8 @@ export default function PostList({ history }) {
       .catch(error => {
         // 에러를 처리하는 공통 모듈을 둘까?
         if ( error.response.status === 401 ) {
-          history.push("/accounts/login/");
+          const nextUrl = encodeURIComponent(location.pathname + location.search);
+          history.push(`/accounts/login/?next=${nextUrl}`);
         }
 
         setError(error);
