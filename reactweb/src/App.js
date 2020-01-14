@@ -6,6 +6,7 @@ import LoginPage from "./components/LoginPage";
 import AppContext from "./AppContext";
 import axiosInstance from "./api";
 
+import 'antd/dist/antd.css';
 import './App.scss';
 
 
