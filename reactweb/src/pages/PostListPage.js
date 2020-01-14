@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect, useState} from "react";
-import styles from "./PostList.module.scss";
-import PostDetail from "./PostDetail";
 import {Button} from "antd";
 import {getPostList} from "../api/BlogAPI";
+import PostDetailPage from "./PostDetailPage";
+import styles from "./PostListPage.module.scss";
 
 
-export default function PostList() {
+export default function PostListPage() {
   const [loading, setLoading] = useState(false);
   const [postList, setPostList] = useState([]);
 
@@ -32,7 +32,7 @@ export default function PostList() {
       {loading && <div>로딩 중 ...</div>}
 
       {postList.map(post => (
-        <PostDetail key={post.pk} {...post} />
+        <PostDetailPage key={post.pk} {...post} />
       ))}
 
       <hr />

@@ -1,17 +1,18 @@
 import React, {useContext} from 'react';
+import { Layout, Menu, Breadcrumb } from 'antd';
 import {Router as BrowserRouter, Route, Switch, Redirect, NavLink} from 'react-router-dom';
 import {createBrowserHistory as createHistory} from "history";
-import PostList from "./components/PostList";
-import LoginPage from "./components/LoginPage";
+
 import AppContext from "./contexts/AppContext";
 import axiosInstance from "./api/instance";
 
-import { Layout, Menu, Breadcrumb } from 'antd';
+import LoginPage from "./pages/LoginPage";
+import NoMatchPage from "./pages/NoMatchPage";
+import PhotoListPage from "./pages/PhotoListPage";
+import PostListPage from "./pages/PostListPage";
 
 import 'antd/dist/antd.css';
 import './App.scss';
-import NoMatch from "./components/NoMatch";
-import PhotoList from "./components/PhotoList";
 
 
 const history = createHistory();
@@ -86,9 +87,9 @@ function App() {
                 <Redirect to={"/blog/"} />
               </Route>
               <Route exact path={"/accounts/login/"} component={LoginPage}/>
-              <Route exact path={"/blog/"} component={PostList}/>
-              <Route exact path={"/photos/"} component={PhotoList}/>
-              <Route component={NoMatch} />
+              <Route exact path={"/blog/"} component={PostListPage}/>
+              <Route exact path={"/photos/"} component={PhotoListPage}/>
+              <Route component={NoMatchPage} />
             </Switch>
           </div>
         </Layout.Content>

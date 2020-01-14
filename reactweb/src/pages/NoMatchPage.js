@@ -1,10 +1,10 @@
 import React from "react";
 
 
-export default function PhotoList() {
+export default function NoMatchPage() {
   return (
     <div>
-      PhotoList
+      404
     </div>
   );
 }
