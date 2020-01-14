@@ -128,6 +128,11 @@ STATIC_URL = '/static/'
 
 
 CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+CORS_ALLOW_HEADERS = [
+    'Authorization',
+    'Cache-Control',
+    'X-Requested-With',
+]
 
 
 JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', SECRET_KEY)

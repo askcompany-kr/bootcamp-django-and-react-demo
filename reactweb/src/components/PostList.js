@@ -12,10 +12,6 @@ export default function PostList({ history, location }) {
   const [postList, setPostList] = useState(null);
   const [error, setError] = useState();
 
-  useEffect(() => {
-    loadPostList();
-  }, []);
-
   const loadPostList = useCallback(() => {
     setLoading(true);
 
@@ -27,19 +23,24 @@ export default function PostList({ history, location }) {
         setPostList(data);
       })
       .catch(error => {
-        // 에러를 처리하는 공통 모듈을 둘까?
-        if ( error.response.status === 401 ) {
-          const nextUrl = encodeURIComponent(location.pathname + location.search);
-          history.push(`/accounts/login/?next=${nextUrl}`);
-        }
-
         setError(error);
         console.error(error);
-        // history.push('/accounts/login/');
+
+        // 에러를 처리하는 공통 모듈을 둘까?
+        if ( error.response.status === 401 ) {
+          setTimeout(() => {
+            const nextUrl = encodeURIComponent(location.pathname + location.search);
+            history.push(`/accounts/login/?next=${nextUrl}`);
+          });
+        }
       })
       .finally(() => {
         setLoading(false);
       });
+  }, [history, location, jwtToken]);
+
+  useEffect(() => {
+    loadPostList();
   }, []);
 
   return (
