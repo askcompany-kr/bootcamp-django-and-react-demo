@@ -8,17 +8,4 @@ const axiosInstance = Axios.create({
 axiosInstance.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axiosInstance.defaults.headers.common['Cache-Control'] = 'no-cache';
 
-// axiosInstance.interceptors.response.use(
-//   response => {
-//     // Do something with response data
-//     return response;
-//   },
-//   error => {
-//     // Do something with response error
-//
-//     console.error(error);
-//     return Promise.reject(error);
-//   }
-// );
-
 export default axiosInstance;
