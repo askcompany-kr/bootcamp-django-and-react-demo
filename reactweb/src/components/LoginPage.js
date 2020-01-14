@@ -1,8 +1,8 @@
 import React, {useContext, useState} from "react";
 import {parse as parseQueryString} from "querystring";
-import axiosInstance from "../api";
 import useInputs from "../lib/useInputs";
 import {AppContext} from "../contexts/AppContext";
+import {requestLogin} from "../api/UserAPI";
 
 
 export default function LoginPage({ history, location }) {
@@ -18,16 +18,11 @@ export default function LoginPage({ history, location }) {
 
     const data = { username, password };
 
-    axiosInstance.post("/accounts/login/", data)
-      .then(response => {
-        const { data: jwtToken } = response;
+    requestLogin({ data })
+      .then(jwtToken => {
         setJwtToken(jwtToken);
-
         const { next: nextUrl } = queryString;
         history.push(nextUrl || "/");
-      })
-      .catch(e => {
-        console.error(e);
       })
       .finally(() => {
         setIsLoading(false);

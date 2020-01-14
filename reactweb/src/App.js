@@ -4,7 +4,7 @@ import {createBrowserHistory as createHistory} from "history";
 import PostList from "./components/PostList";
 import LoginPage from "./components/LoginPage";
 import AppContext from "./contexts/AppContext";
-import axiosInstance from "./api";
+import axiosInstance from "./api/instance";
 
 import { Layout, Menu, Breadcrumb } from 'antd';
 

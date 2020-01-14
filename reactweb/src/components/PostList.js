@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useState} from "react";
 import styles from "./PostList.module.scss";
 import PostDetail from "./PostDetail";
-import axiosInstance from "../api";
 import {Button} from "antd";
+import {getPostList} from "../api/BlogAPI";
 
 
 export default function PostList() {
@@ -12,12 +12,10 @@ export default function PostList() {
   const loadPostList = useCallback(() => {
     setLoading(true);
 
-    axiosInstance.get("/blog/")
-      .then(response => {
-        const { data } = response;
-        setPostList(data);
+    getPostList()
+      .then(postList => {
+        setPostList(postList);
       })
-      .catch(error => {})
       .finally(() => {
         setLoading(false);
       });
