@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Router as BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Router as BrowserRouter, Route, Switch, Redirect, NavLink} from 'react-router-dom';
 import {createBrowserHistory as createHistory} from "history";
 import PostList from "./components/PostList";
 import LoginPage from "./components/LoginPage";
@@ -10,6 +10,8 @@ import { Layout, Menu, Breadcrumb } from 'antd';
 
 import 'antd/dist/antd.css';
 import './App.scss';
+import NoMatch from "./components/NoMatch";
+import PhotoList from "./components/PhotoList";
 
 
 const history = createHistory();
@@ -55,10 +57,22 @@ function App() {
         <Layout.Header>
           <div className={"logo"} />
           <Menu theme={"dark"} mode={"horizontal"} style={{ lineHeight: '64px' }}
-                defaultSelectedKeys={"2"}>
-            <Menu.Item key={"1"}>Nav 1</Menu.Item>
-            <Menu.Item key={"2"}>Nav 2</Menu.Item>
-            <Menu.Item key={"3"}>Nav 3</Menu.Item>
+                defaultSelectedKeys={"/blog/"}>
+            <Menu.Item key={"/blog/"}>
+              <NavLink to={"/blog/"}>
+                Blog
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key={"/photos/"}>
+              <NavLink to={"/photos/"}>
+                Photos
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key={"/about/"}>
+              <NavLink to={"/about/"}>
+                About
+              </NavLink>
+            </Menu.Item>
           </Menu>
         </Layout.Header>
         <Layout.Content style={{ padding: '0 50px' }}>
@@ -68,8 +82,13 @@ function App() {
           </Breadcrumb>
           <div style={{ backgroundColor: '#fff', padding: 24, minHeight: 280 }}>
             <Switch>
+              <Route exact path={"/"}>
+                <Redirect to={"/blog/"} />
+              </Route>
               <Route exact path={"/accounts/login/"} component={LoginPage}/>
-              <Route component={PostList}/>
+              <Route exact path={"/blog/"} component={PostList}/>
+              <Route exact path={"/photos/"} component={PhotoList}/>
+              <Route component={NoMatch} />
             </Switch>
           </div>
         </Layout.Content>
