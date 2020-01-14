@@ -3,8 +3,10 @@ import {Router as BrowserRouter, Route, Switch} from 'react-router-dom';
 import {createBrowserHistory as createHistory} from "history";
 import PostList from "./components/PostList";
 import LoginPage from "./components/LoginPage";
-import AppContext from "./AppContext";
+import AppContext from "./contexts/AppContext";
 import axiosInstance from "./api";
+
+import { Layout, Menu, Breadcrumb } from 'antd';
 
 import 'antd/dist/antd.css';
 import './App.scss';
@@ -49,14 +51,32 @@ function App() {
 
   return (
     <BrowserRouter history={history}>
-      <div className="App">
-        <h1>Bootcamp Django Demo</h1>
-
-        <Switch>
-          <Route exact path={"/accounts/login/"} component={LoginPage}/>
-          <Route component={PostList}/>
-        </Switch>
-      </div>
+      <Layout className={"layout"}>
+        <Layout.Header>
+          <div className={"logo"} />
+          <Menu theme={"dark"} mode={"horizontal"} style={{ lineHeight: '64px' }}
+                defaultSelectedKeys={"2"}>
+            <Menu.Item key={"1"}>Nav 1</Menu.Item>
+            <Menu.Item key={"2"}>Nav 2</Menu.Item>
+            <Menu.Item key={"3"}>Nav 3</Menu.Item>
+          </Menu>
+        </Layout.Header>
+        <Layout.Content style={{ padding: '0 50px' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            <Breadcrumb.Item>Blog</Breadcrumb.Item>
+          </Breadcrumb>
+          <div style={{ backgroundColor: '#fff', padding: 24, minHeight: 280 }}>
+            <Switch>
+              <Route exact path={"/accounts/login/"} component={LoginPage}/>
+              <Route component={PostList}/>
+            </Switch>
+          </div>
+        </Layout.Content>
+        <Layout.Footer style={{ textAlign: 'center' }}>
+          Ant Design ©2018 Created by Ant UED
+        </Layout.Footer>
+      </Layout>
     </BrowserRouter>
   );
 }

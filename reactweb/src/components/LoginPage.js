@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {parse as parseQueryString} from "querystring";
 import axiosInstance from "../api";
 import useInputs from "../lib/useInputs";
-import {AppContext} from "../AppContext";
+import {AppContext} from "../contexts/AppContext";
 
 
 export default function LoginPage({ history, location }) {

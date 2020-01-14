@@ -2,7 +2,15 @@ import React from "react";
 import styles from "./PostDetail.module.scss";
 
 
-export default function PostDetail({ pk, message, updated_at }) {
+export type PostDetailProps = {
+  pk: number,
+  message: string,
+  updated_at: string,
+};
+
+
+
+export default function PostDetail({ pk, message, updated_at }: PostDetailProps) {
   return (
     <div className={styles.post_detail}>
       <h3>
