@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
 import {createContext, useState} from "react";
 import useLocalStorage from "lib/useLocalStorage";
 
 export const AppContext = createContext();
+
+export const useAppContext = () => useContext(AppContext);
 
 const AppProvider = ({ children }) => {
   const [name, setName] = useState('Ask Company');

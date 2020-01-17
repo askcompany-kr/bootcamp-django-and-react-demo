@@ -1,9 +1,9 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Layout, Menu, Breadcrumb, Alert} from 'antd';
 import {Router as BrowserRouter, Route, Switch, Redirect, NavLink} from 'react-router-dom';
 import {createBrowserHistory as createHistory} from "history";
 
-import AppContext, {AppProvider} from "./contexts/AppContext";
+import {AppProvider, useAppContext} from "./contexts/AppContext";
 import axiosInstance from "./api/instance";
 
 import LoginPage from "./pages/accounts/LoginPage";
@@ -19,7 +19,7 @@ const history = createHistory();
 
 
 function App() {
-  const { state: { jwtToken } } = useContext(AppContext);
+  const { state: { jwtToken } } = useAppContext();
   const [error, setError] = useState();
 
   axiosInstance.interceptors.request.use(

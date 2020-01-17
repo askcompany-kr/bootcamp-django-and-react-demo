@@ -1,12 +1,12 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import {parse as parseQueryString} from "querystring";
 import useInputs from "lib/useInputs";
-import {AppContext} from "contexts/AppContext";
+import {useAppContext} from "contexts/AppContext";
 import {requestLogin} from "api/UserAPI";
 
 
 export default function LoginPage({ history, location }) {
-  const { actions: { setJwtToken } } = useContext(AppContext);
+  const { actions: { setJwtToken } } = useAppContext();
   const [inputState, onChange] = useInputs({ username: '', password : '' });
   const { username, password } = inputState;
   const [isLoading, setIsLoading] = useState(false);
