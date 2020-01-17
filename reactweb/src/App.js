@@ -1,9 +1,9 @@
-import React, {useContext} from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import React, {useContext, useState} from 'react';
+import {Layout, Menu, Breadcrumb, Alert} from 'antd';
 import {Router as BrowserRouter, Route, Switch, Redirect, NavLink} from 'react-router-dom';
 import {createBrowserHistory as createHistory} from "history";
 
-import AppContext from "./contexts/AppContext";
+import AppContext, {AppProvider} from "./contexts/AppContext";
 import axiosInstance from "./api/instance";
 
 import LoginPage from "./pages/LoginPage";
@@ -20,9 +20,12 @@ const history = createHistory();
 
 function App() {
   const { state: { jwtToken } } = useContext(AppContext);
+  const [error, setError] = useState();
 
   axiosInstance.interceptors.request.use(
     config => {
+      setError(null);
+
       // Do something before request is sent
       if ( jwtToken )
         config.headers.common['Authorization'] = `Token ${jwtToken}`;
@@ -37,7 +40,11 @@ function App() {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
 
-      if ( error.response.status === 401 ) {
+      if ( !error.response ) {
+        console.error(error);
+        setError(error.message);
+      }
+      else if ( error.response.status === 401 ) {
         setTimeout(() => {
           const { location: { pathname, search } } = history;
           const nextUrl = encodeURIComponent(pathname + search);
@@ -55,6 +62,7 @@ function App() {
   return (
     <BrowserRouter history={history}>
       <Layout className={"layout"}>
+        {error && <Alert message={error} type={"error"} showIcon />}
         <Layout.Header>
           <div className={"logo"} />
           <Menu theme={"dark"} mode={"horizontal"} style={{ lineHeight: '64px' }}
@@ -102,4 +110,8 @@ function App() {
 }
 
 
-export default App;
+export default (() => (
+  <AppProvider>
+    <App />
+  </AppProvider>
+));
