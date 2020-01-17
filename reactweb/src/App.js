@@ -6,10 +6,10 @@ import {createBrowserHistory as createHistory} from "history";
 import AppContext, {AppProvider} from "./contexts/AppContext";
 import axiosInstance from "./api/instance";
 
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/accounts/LoginPage";
 import NoMatchPage from "./pages/NoMatchPage";
-import PhotoListPage from "./pages/PhotoListPage";
-import PostListPage from "./pages/PostListPage";
+import PhotoListPage from "./pages/blog/PhotoListPage";
+import PostListPage from "./pages/blog/PostListPage";
 
 import 'antd/dist/antd.css';
 import './App.scss';

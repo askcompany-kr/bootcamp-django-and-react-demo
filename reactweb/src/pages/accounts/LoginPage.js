@@ -1,8 +1,8 @@
 import React, {useContext, useState} from "react";
 import {parse as parseQueryString} from "querystring";
-import useInputs from "../lib/useInputs";
-import {AppContext} from "../contexts/AppContext";
-import {requestLogin} from "../api/UserAPI";
+import useInputs from "lib/useInputs";
+import {AppContext} from "contexts/AppContext";
+import {requestLogin} from "api/UserAPI";
 
 
 export default function LoginPage({ history, location }) {

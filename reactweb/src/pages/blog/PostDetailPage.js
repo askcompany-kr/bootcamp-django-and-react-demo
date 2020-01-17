@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./PostDetailPage.module.scss";
+import styles from "pages/blog/PostDetailPage.module.scss";
 
 
 export default function PostDetailPage({ pk, message, updated_at }) {

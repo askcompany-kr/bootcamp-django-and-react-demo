@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {Button} from "antd";
-import {getPostList} from "../api/BlogAPI";
-import PostDetailPage from "./PostDetailPage";
-import styles from "./PostListPage.module.scss";
+import {getPostList} from "api/BlogAPI";
+import PostDetailPage from "pages/blog/PostDetailPage";
+import styles from "pages/blog/PostListPage.module.scss";
 
 
 export default function PostListPage() {
