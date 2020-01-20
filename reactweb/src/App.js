@@ -18,14 +18,9 @@ import PrivateRoute from "./lib/PrivateRouter";
 import ProfilePage from "./pages/accounts/ProfilePage";
 import RootPage from "./pages/RootPage";
 
-
-import rootReducer from "store/modules";
-import {createStore} from "redux";
-import {Provider} from "react-redux";
 import CounterPage from "./pages/CounterPage";
 import WaitingListContainer from "./containers/WaitingListContainer";
-
-const store = createStore(rootReducer);
+import ReduxProvider from "./contexts/ReduxProvider";
 
 
 const history = createHistory();
@@ -78,89 +73,89 @@ function App() {
   // TODO: verify jwtToken
 
   return (
-    <Provider store={store}>
-      <BrowserRouter history={history}>
-        <Layout className={"layout"}>
-          {error && <Alert message={error} type={"error"} showIcon />}
-          <Layout.Header>
-            <div className={"logo"} />
-            <Menu theme={"dark"} mode={"horizontal"} style={{ lineHeight: '64px' }}
-                  defaultSelectedKeys={"/blog/"}>
-              <Menu.Item key={"/blog/"}>
-                <NavLink to={"/blog/"}>
-                  Blog
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item key={"/photos/"}>
-                <NavLink to={"/photos/"}>
-                  Photos
-                </NavLink>
-              </Menu.Item>
+    <BrowserRouter history={history}>
+      <Layout className={"layout"}>
+        {error && <Alert message={error} type={"error"} showIcon />}
+        <Layout.Header>
+          <div className={"logo"} />
+          <Menu theme={"dark"} mode={"horizontal"} style={{ lineHeight: '64px' }}
+                defaultSelectedKeys={"/blog/"}>
+            <Menu.Item key={"/blog/"}>
+              <NavLink to={"/blog/"}>
+                Blog
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key={"/photos/"}>
+              <NavLink to={"/photos/"}>
+                Photos
+              </NavLink>
+            </Menu.Item>
 
-              <Menu.Item key={"/counter/"}>
-                <NavLink to={"/counter/"}>
-                  Counter
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item key={"/waiting/"}>
-                <NavLink to={"/waiting/"}>
-                  Waiting
-                </NavLink>
-              </Menu.Item>
+            <Menu.Item key={"/counter/"}>
+              <NavLink to={"/counter/"}>
+                Counter
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key={"/waiting/"}>
+              <NavLink to={"/waiting/"}>
+                Waiting
+              </NavLink>
+            </Menu.Item>
 
-              <Menu.Item key={"/about/"}>
-                <NavLink to={"/about/"}>
-                  About
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item key={"/accounts/profile/"}>
-                <NavLink to={"/accounts/profile/"}>
-                  Profile
-                </NavLink>
-              </Menu.Item>
+            <Menu.Item key={"/about/"}>
+              <NavLink to={"/about/"}>
+                About
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key={"/accounts/profile/"}>
+              <NavLink to={"/accounts/profile/"}>
+                Profile
+              </NavLink>
+            </Menu.Item>
 
-              {jwtToken &&
-                <Menu.Item key={"/accounts/logout/"} style={{ float: 'right' }}>
-                  <NavLink to={"/accounts/logout/"}>
-                    Logout
-                  </NavLink>
-                </Menu.Item>}
-            </Menu>
-          </Layout.Header>
-          <Layout.Content style={{ padding: '0 50px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
-              <Breadcrumb.Item>Blog</Breadcrumb.Item>
-            </Breadcrumb>
-            <div style={{ backgroundColor: '#fff', padding: 24, minHeight: 280 }}>
-              <Switch>
-                <Route exact path={"/"} component={RootPage} />
-                {/*<Route exact path={"/"}>*/}
-                {/*  <Redirect to={"/blog/"} />*/}
-                {/*</Route>*/}
-                <Route exact path={"/accounts/login/"} component={LoginPage} />
-                <Route exact path={"/accounts/logout/"} component={LogoutPage} />
-                <Route exact path={"/blog/"} component={PostListPage}/>
-                <Route exact path={"/photos/"} component={PhotoListPage}/>
-                <Route exact path={"/counter/"} component={CounterPage}/>
-                <Route exact path={"/waiting/"} component={WaitingListContainer}/>
-                <PrivateRoute exact path={"/accounts/profile/"} component={ProfilePage} isAuthenticated={isAuthenticated} />
-                <Route component={NoMatchPage} />
-              </Switch>
-            </div>
-          </Layout.Content>
-          <Layout.Footer style={{ textAlign: 'center' }}>
-            Ant Design ©2018 Created by Ant UED
-          </Layout.Footer>
-        </Layout>
-      </BrowserRouter>
-    </Provider>
+            {jwtToken &&
+              <Menu.Item key={"/accounts/logout/"} style={{ float: 'right' }}>
+                <NavLink to={"/accounts/logout/"}>
+                  Logout
+                </NavLink>
+              </Menu.Item>}
+          </Menu>
+        </Layout.Header>
+        <Layout.Content style={{ padding: '0 50px' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            <Breadcrumb.Item>Blog</Breadcrumb.Item>
+          </Breadcrumb>
+          <div style={{ backgroundColor: '#fff', padding: 24, minHeight: 280 }}>
+            <Switch>
+              <Route exact path={"/"} component={RootPage} />
+              {/*<Route exact path={"/"}>*/}
+              {/*  <Redirect to={"/blog/"} />*/}
+              {/*</Route>*/}
+              <Route exact path={"/accounts/login/"} component={LoginPage} />
+              <Route exact path={"/accounts/logout/"} component={LogoutPage} />
+              <Route exact path={"/blog/"} component={PostListPage}/>
+              <Route exact path={"/photos/"} component={PhotoListPage}/>
+              <Route exact path={"/counter/"} component={CounterPage}/>
+              <Route exact path={"/waiting/"} component={WaitingListContainer}/>
+              <PrivateRoute exact path={"/accounts/profile/"} component={ProfilePage} isAuthenticated={isAuthenticated} />
+              <Route component={NoMatchPage} />
+            </Switch>
+          </div>
+        </Layout.Content>
+        <Layout.Footer style={{ textAlign: 'center' }}>
+          Ant Design ©2018 Created by Ant UED
+        </Layout.Footer>
+      </Layout>
+    </BrowserRouter>
   );
 }
 
 
 export default (() => (
   <AppProvider>
-    <App />
+    <ReduxProvider>
+      <App />
+    </ReduxProvider>
   </AppProvider>
 ));
