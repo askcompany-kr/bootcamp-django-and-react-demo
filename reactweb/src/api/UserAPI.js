@@ -1,9 +1,10 @@
 import axiosInstance from "./instance";
 
 export function requestLogin({data}) {
-  return axiosInstance.post("/accounts/login/", data)
+  const headers = { 'Authorization': '' };
+  return axiosInstance.post("/accounts/login/", data, { headers })
     .then(response => {
-      const {data: jwtToken} = response;
-      return jwtToken;
+      const {data: { errors, token: jwtToken } } = response;
+      return { errors, jwtToken };
     });
 }
