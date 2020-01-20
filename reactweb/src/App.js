@@ -13,6 +13,10 @@ import PostListPage from "./pages/blog/PostListPage";
 
 import 'antd/dist/antd.css';
 import './App.scss';
+import LogoutPage from "./pages/accounts/LogoutPage";
+import PrivateRoute from "./lib/PrivateRouter";
+import ProfilePage from "./pages/accounts/ProfilePage";
+import RootPage from "./pages/RootPage";
 
 
 const history = createHistory();
@@ -21,6 +25,8 @@ const history = createHistory();
 function App() {
   const { state: { jwtToken } } = useAppContext();
   const [error, setError] = useState();
+
+  const isAuthenticated = !!jwtToken;
 
   axiosInstance.interceptors.request.use(
     config => {
@@ -46,9 +52,10 @@ function App() {
       }
       else if ( error.response.status === 401 ) {
         setTimeout(() => {
-          const { location: { pathname, search } } = history;
-          const nextUrl = encodeURIComponent(pathname + search);
-          history.push(`/accounts/login/?next=${nextUrl}`);
+          const { location } = history;
+          // const nextUrl = encodeURIComponent(pathname + search);
+          // history.push(`/accounts/login/?next=${nextUrl}`);
+          return <Redirect to={{ pathname: '/accounts/login/', state: { from: location } }} />;
         });
       }
       else {
@@ -58,6 +65,8 @@ function App() {
       return Promise.reject(error);
     }
   );
+
+  // TODO: verify jwtToken
 
   return (
     <BrowserRouter history={history}>
@@ -82,6 +91,19 @@ function App() {
                 About
               </NavLink>
             </Menu.Item>
+
+            <Menu.Item key={"/accounts/profile/"}>
+              <NavLink to={"/accounts/profile/"}>
+                Profile
+              </NavLink>
+            </Menu.Item>
+
+            {jwtToken &&
+              <Menu.Item key={"/accounts/logout/"} style={{ float: 'right' }}>
+                <NavLink to={"/accounts/logout/"}>
+                  Logout
+                </NavLink>
+              </Menu.Item>}
           </Menu>
         </Layout.Header>
         <Layout.Content style={{ padding: '0 50px' }}>
@@ -91,18 +113,23 @@ function App() {
           </Breadcrumb>
           <div style={{ backgroundColor: '#fff', padding: 24, minHeight: 280 }}>
             <Switch>
-              <Route exact path={"/"}>
-                <Redirect to={"/blog/"} />
-              </Route>
-              <Route exact path={"/accounts/login/"} component={LoginPage}/>
+              <Route exact path={"/"} component={RootPage} />
+              {/*<Route exact path={"/"}>*/}
+              {/*  <Redirect to={"/blog/"} />*/}
+              {/*</Route>*/}
+              <Route exact path={"/accounts/login/"} component={LoginPage} />
+              <Route exact path={"/accounts/logout/"} component={LogoutPage} />
               <Route exact path={"/blog/"} component={PostListPage}/>
               <Route exact path={"/photos/"} component={PhotoListPage}/>
+              <PrivateRoute exact path={"/accounts/profile/"} component={ProfilePage} isAuthenticated={isAuthenticated} />
               <Route component={NoMatchPage} />
             </Switch>
           </div>
         </Layout.Content>
         <Layout.Footer style={{ textAlign: 'center' }}>
           Ant Design ©2018 Created by Ant UED
+          <hr/>
+          {jwtToken}
         </Layout.Footer>
       </Layout>
     </BrowserRouter>

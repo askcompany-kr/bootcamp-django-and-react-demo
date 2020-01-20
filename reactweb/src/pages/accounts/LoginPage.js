@@ -1,10 +1,9 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {parse as parseQueryString} from "querystring";
-import useInputs from "lib/useInputs";
 import {useAppContext} from "contexts/AppContext";
 import {requestLogin} from "api/UserAPI";
-import {Button, Form, Icon, Input} from "antd";
+import {Button, Form, Icon, Input, Spin} from "antd";
 import {concat} from "lodash";
+import {Redirect} from "react-router-dom";
 
 
 function hasErrors(fieldsError) {
@@ -12,12 +11,10 @@ function hasErrors(fieldsError) {
 }
 
 
-function LoginPage({ form, history, location }) {
+function LoginPage({ form, location }) {
   const { actions: { setJwtToken } } = useAppContext();
-  // const [inputState, onChange] = useInputs({ username: '', password : '' });
   const [isLoading, setIsLoading] = useState(false);
-
-  const queryString = parseQueryString(location.search.replace('?', ''));
+  const [redirectTo, setRedirectTo] = useState();
 
   useEffect(() => {
     form.validateFields();
@@ -32,8 +29,6 @@ function LoginPage({ form, history, location }) {
       if (!error) {
         requestLogin({ data: fieldValues })
           .then(({ errors, jwtToken }) => {
-            console.log("errors :", errors, fieldValues);
-            console.log("jwtToken :", jwtToken);
             if ( errors ) {
               const usernameErrors = errors['username'];
               form.setFields({
@@ -48,7 +43,7 @@ function LoginPage({ form, history, location }) {
                 .map(errorMessage => new Error(errorMessage));
 
               form.setFields({
-                password:{
+                password: {
                   value: fieldValues['password'],
                   errors: passwordErrors,
                 }
@@ -56,8 +51,8 @@ function LoginPage({ form, history, location }) {
             }
             else if ( jwtToken ) {
               setJwtToken(jwtToken);
-              const { next: nextUrl } = queryString;
-              history.push(nextUrl || "/");
+              const { state: { from }} = location;
+              setRedirectTo(from);
             }
           })
           .finally(() => {
@@ -65,7 +60,11 @@ function LoginPage({ form, history, location }) {
           });
       }
     });
-  }, []);  //inputState]);
+  }, []);
+
+  if ( redirectTo ) {
+    return <Redirect to={redirectTo} />;
+  }
 
   const errorMessages = {
     username: form.isFieldTouched('username') && form.getFieldError('username'),  // undefined or array
@@ -115,6 +114,7 @@ function LoginPage({ form, history, location }) {
           <Button type="primary"
                   htmlType="submit"
                   disabled={hasErrors(form.getFieldsError())}>
+            {isLoading && <Spin />}
             Login
           </Button>
         </Form.Item>
