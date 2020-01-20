@@ -23,6 +23,7 @@ import rootReducer from "store/modules";
 import {createStore} from "redux";
 import {Provider} from "react-redux";
 import CounterPage from "./pages/CounterPage";
+import WaitingListContainer from "./containers/WaitingListContainer";
 
 const store = createStore(rootReducer);
 
@@ -95,11 +96,18 @@ function App() {
                   Photos
                 </NavLink>
               </Menu.Item>
+
               <Menu.Item key={"/counter/"}>
                 <NavLink to={"/counter/"}>
                   Counter
                 </NavLink>
               </Menu.Item>
+              <Menu.Item key={"/waiting/"}>
+                <NavLink to={"/waiting/"}>
+                  Waiting
+                </NavLink>
+              </Menu.Item>
+
               <Menu.Item key={"/about/"}>
                 <NavLink to={"/about/"}>
                   About
@@ -135,6 +143,7 @@ function App() {
                 <Route exact path={"/blog/"} component={PostListPage}/>
                 <Route exact path={"/photos/"} component={PhotoListPage}/>
                 <Route exact path={"/counter/"} component={CounterPage}/>
+                <Route exact path={"/waiting/"} component={WaitingListContainer}/>
                 <PrivateRoute exact path={"/accounts/profile/"} component={ProfilePage} isAuthenticated={isAuthenticated} />
                 <Route component={NoMatchPage} />
               </Switch>
